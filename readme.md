@@ -1,6 +1,6 @@
 # Sup dear!
 
-Website blog with Django, MySql, Bootstrap4. 
+Blog developed with Django, MySql, Bootstrap4. 
 See my video below (portuguese)
 
 [Youtube video](https://youtu.be/ZfHioI0azKU)
