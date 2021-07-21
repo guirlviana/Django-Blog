@@ -1,14 +1,19 @@
 {% load static %}
-<footer class="bg-primary text-light">
+<footer class="bg-primary text-light static-bottom">
     <div class="container navbar-dark pt-4 mt-5">
+        
         <div class="row">
             <div class="col">
-                <p class="text-left"></p>
+                <p class="text-left">Meu blog</p>
             </div>
             <div class="col">
-                <p class="text-right"></p>
+                {% for categoria in categorias %}
+                    <a class="text-white" href="{% url 'post_categoria' categoria %}"><p class="text-right">{{ categoria }}</p></a>
+                {% endfor %}
             </div>
         </div>
+                        
+                
     </div>
 </footer>
 <!--/_footer.html-->

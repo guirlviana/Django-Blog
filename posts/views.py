@@ -73,6 +73,7 @@ class PostDetalhes(UpdateView):
         post = self.get_object()
         comentarios = Comentario.objects.filter(publicado_comentario=True, post_comentario=post.id)
         contexto['comentarios'] = comentarios
+        contexto['categorias'] = Categoria.objects.all()
         return contexto
 
     def form_valid(self, form):
