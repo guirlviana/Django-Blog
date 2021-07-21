@@ -12,7 +12,7 @@ from django.contrib import messages
 class PostIndex(ListView):
     model = Post
     template_name = 'posts/index.html'
-    paginate_by = 5
+    paginate_by = 3
     context_object_name = 'posts'
 
     def get_queryset(self):
@@ -67,6 +67,13 @@ class PostDetalhes(UpdateView):
     model = Post
     form_class = FormComentario
     context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        post = self.get_object()
+        comentarios = Comentario.objects.filter(publicado_comentario=True, post_comentario=post.id)
+        contexto['comentarios'] = comentarios
+        return contexto
 
     def form_valid(self, form):
         post = self.get_object()
