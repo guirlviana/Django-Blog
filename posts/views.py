@@ -1,9 +1,13 @@
 from typing import List
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 from .models import Post
 from django.db.models import Q, Count, Case, When
+from categorias.models import Categoria
+from comentarios.forms import FormComentario
+from comentarios.models import Comentario
+from django.contrib import messages
 
 class PostIndex(ListView):
     model = Post
@@ -22,6 +26,11 @@ class PostIndex(ListView):
             )
         )
         return qs
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categorias'] = Categoria.objects.all()
+        return context
 
 class PostBusca(PostIndex):
     template_name = 'posts/post_busca.html'
@@ -54,4 +63,19 @@ class PostCategoria(PostIndex):
         return qs
 
 class PostDetalhes(UpdateView):
-    pass
+    template_name = 'posts/post_detalhes.html'
+    model = Post
+    form_class = FormComentario
+    context_object_name = 'post'
+
+    def form_valid(self, form):
+        post = self.get_object()
+        comentario  = Comentario(**form.cleaned_data)
+        comentario.post_comentario = post
+        
+        if self.request.user.is_authenticated:
+            comentario.usuario_comentario = self.request.user
+        
+        comentario.save()
+        messages.success(self.request, 'Comentário enviado para revisão')
+        return redirect('post_detalhes', pk=post.id)
